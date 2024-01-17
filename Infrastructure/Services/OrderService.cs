@@ -10,20 +10,20 @@ namespace Infrastructure.Services
 {
     public class OrderService : IOrderService
     {
-        private readonly IBasketRepository _basketRepo;
+        private readonly IBasketService _basketService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IPaymentService _paymentService;
-        public OrderService(IBasketRepository basketRepo, IUnitOfWork unitOfWork, IPaymentService paymentService)
+        public OrderService(IBasketService basketService, IUnitOfWork unitOfWork, IPaymentService paymentService)
         {
             _paymentService = paymentService;
             _unitOfWork = unitOfWork;
-            _basketRepo = basketRepo;
+            _basketService = basketService;
         }
 
         public async Task<Order> CreateOrderAsync(string buyerEmail, int delieveryMethodId, string basketId, Address shippingAddress)
         {
             // get basket from repo
-            var basket = await _basketRepo.GetBasketAsync(basketId);
+            var basket = await _basketService.GetBasketAsync(basketId);
 
             // get items from the product repo
             var items = new List<OrderItem>();

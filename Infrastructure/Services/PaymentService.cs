@@ -15,12 +15,12 @@ namespace Infrastructure.Services
     public class PaymentService : IPaymentService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IBasketRepository _basketRepository;
+        private readonly IBasketService _basketService;
         private readonly IConfiguration _config;
-        public PaymentService(IUnitOfWork unitOfWork, IBasketRepository basketRepository, IConfiguration config)
+        public PaymentService(IUnitOfWork unitOfWork, IBasketService basketService, IConfiguration config)
         {
             _config = config;
-            _basketRepository = basketRepository;
+            _basketService = basketService;
             _unitOfWork = unitOfWork;
         }
 
@@ -28,7 +28,7 @@ namespace Infrastructure.Services
         {
             StripeConfiguration.ApiKey = _config["StripeSettings:SecretKey"];
 
-            var basket = await _basketRepository.GetBasketAsync(basketId);
+            var basket = await _basketService.GetBasketAsync(basketId);
 
             if (basket == null) return null;
 
@@ -74,7 +74,7 @@ namespace Infrastructure.Services
                 await service.UpdateAsync(basket.PaymentIntentId, options);
             }
 
-            await _basketRepository.UpdateBasketAsync(basket);
+            await _basketService.UpdateBasketAsync(basket);
 
             return basket;
         }

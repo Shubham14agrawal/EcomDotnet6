@@ -21,10 +21,13 @@ namespace Infrastructure.Data
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<DeliveryMethod> DeliveryMethods { get; set; }
 
+        public DbSet<UsersBasket> UserBaskets { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+            modelBuilder.Entity<UsersBasket>().HasKey(vf => new { vf.Id, vf.BasketItemId });
 
             if (Database.ProviderName == "Microsoft.EntityFrameworkCore.Sqlite")
             {
@@ -46,6 +49,7 @@ namespace Infrastructure.Data
                     }
                 }
             }
+            
         }
     }
 }

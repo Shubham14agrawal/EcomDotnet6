@@ -34,11 +34,7 @@ namespace API
                 x.UseSqlServer(_config.GetConnectionString("IdentityConnection"));
             });
 
-            services.AddSingleton<IConnectionMultiplexer>(c =>
-            {
-                var configuration = ConfigurationOptions.Parse(_config.GetConnectionString("Redis"), true);
-                return ConnectionMultiplexer.Connect(configuration);
-            });
+
             services.AddApplicationServices();
             services.AddIdentityServices(_config);
             services.AddSwaggerDocumentation();
