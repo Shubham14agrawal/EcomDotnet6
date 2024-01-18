@@ -29,20 +29,26 @@ namespace API
             services.AddControllers();
             services.AddDbContext<StoreContext>(x =>
                 x.UseSqlServer(_config.GetConnectionString("DefaultConnection")));
-            services.AddDbContext<AppIdentityDbContext>(x => 
-            {
-                x.UseSqlServer(_config.GetConnectionString("IdentityConnection"));
-            });
+            //services.AddDbContext<AppIdentityDbContext>(x => 
+            //{
+            //    x.UseSqlServer(_config.GetConnectionString("IdentityConnection"));
+            //});
+            services.AddAuthentication("Bearer")
+.AddIdentityServerAuthentication("Bearer", options =>
+{
+    options.Authority = "https://localhost:5443";
+    options.ApiName = "CoffeeAPI";
+});
 
 
             services.AddApplicationServices();
-            services.AddIdentityServices(_config);
+            //services.AddIdentityServices(_config);
             services.AddSwaggerDocumentation();
             services.AddCors(opt =>
             {
                 opt.AddPolicy("CorsPolicy", policy =>
                 {
-                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("*");
                 });
             });
         }
@@ -64,7 +70,8 @@ namespace API
             {
                 FileProvider = new PhysicalFileProvider(
                     Path.Combine(Directory.GetCurrentDirectory(), "Content")
-                ), RequestPath = "/content"
+                ),
+                RequestPath = "/content"
             });
 
             app.UseCors("CorsPolicy");
