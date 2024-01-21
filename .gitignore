@@ -6,3 +6,4 @@ appsettings.json
 publish
 wwwroot
 *.vs
+.vs
