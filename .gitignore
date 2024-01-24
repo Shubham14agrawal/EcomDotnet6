@@ -6,3 +6,5 @@ appsettings.json
 publish
 wwwroot
 *.vs
+.vs
+/.vs/skinet/v17/.suo

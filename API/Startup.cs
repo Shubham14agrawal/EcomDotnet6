@@ -2,10 +2,13 @@ using System.IO;
 using API.Extensions;
 using API.Helpers;
 using API.Middleware;
+using Core.Entities.Identity;
 using Infrastructure.Data;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,6 +43,11 @@ namespace API
     options.ApiName = "CoffeeAPI";
 });
 
+            
+
+
+        
+
 
             services.AddApplicationServices();
             //services.AddIdentityServices(_config);
@@ -48,7 +56,7 @@ namespace API
             {
                 opt.AddPolicy("CorsPolicy", policy =>
                 {
-                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200", "https://localhost:5443");
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200", "https://localhost:5443");
                 });
             });
         }
@@ -83,6 +91,8 @@ namespace API
             {
                 endpoints.MapControllers();
                 endpoints.MapFallbackToController("Index", "Fallback");
+                //endpoints.MapDefaultControllerRoute()
+                   //.RequireAuthorization();
             });
         }
     }
